@@ -1,0 +1,1515 @@
+#!/usr/bin/perl
+
+# update-cities.pl - given a set of key/city combinations, update a database
+
+# Eric Lease Morgan <emorgan@nd.edu>
+# (c) University of Notre Dame, and distributed under a GNU Public License
+
+# October 20, 2017 - first cut
+
+
+# configure
+use constant DRIVER   => 'SQLite';
+use constant DATABASE => './etc/pamphlets.db';
+
+# require
+use strict;
+use DBI;
+
+# initialize
+my $driver    = DRIVER; 
+my $database  = DATABASE;
+my $dbh       = DBI->connect( "DBI:$driver:dbname=$database", '', '', { RaiseError => 1 } ) or die $DBI::errstr;
+binmode( STDOUT, ':utf8' );
+
+# process the result
+while( <DATA> ) {
+
+	chop;
+	my ( $system, $city ) = split( "\t", $_ );
+	
+	# escape the sorted title and create an UPDATE statement
+	my $update = qq(UPDATE titles SET city = '$city' where system = '$system';);
+	
+	# echo our good work
+	warn "      system: $system\n";
+	warn "        city: $city\n";
+	warn "         sql: $update\n";
+	warn "\n";
+	
+	# do the work or die
+	my $handle = $dbh->prepare( $update );
+	my $result = $handle->execute() or die $DBI::errstr;
+	
+}
+
+# clean up and done
+$dbh->disconnect();
+exit;
+
+__DATA__
+003078068	New York
+003078069	New York
+003078070	New York
+003078071	Washington
+003078072	St Louis
+003078073	New York
+003078074	Huntington
+003078075	Huntington
+003078076	New York
+003078077	London
+003078078	Glasgow 
+003078079	St Louis
+003078080	Lisbon 
+003078081	London
+003078082	New York
+003078083	Notre Dame
+003078084	Chicago
+003078085	Chicago
+003078086	St Louis
+003078087	Washington
+003078088	Boston
+003078089	New York
+003078090	New York
+003078091	New York
+003078092	New York
+003078093	New York
+003078094	New York
+003078095	Melbourne 
+003078096	Chicago
+003078097	Paterson
+003078098	New York
+003078099	Washington
+003078100	Washington
+003078101	Washington
+003078102	Notre Dame
+003078103	Emmitsburg 
+003078104	New York
+003078105	Trappist 
+003078106	Notre Dame
+003078107	s.i.
+003078108	Notre Dame
+003078109	New Hope
+003078110	Notre Dame
+003078111	South Bend 
+003078112	Washington
+003078113	New York
+003078114	Boston
+003078115	Brooklyn
+003078116	Harlow 
+003078117	London
+003078118	New York
+003078119	New York
+003078120	New York
+003078121	Boston
+003078122	Boston
+003078123	Berlin 
+003078124	Washington
+003078125	New York
+003078126	Madras 
+003135945	Vatican City 
+003135946	Cambridge 
+003135947	Silver Springs 
+003135948	Staten Island
+003135949	Chicago
+003135950	Hales Corners
+003135951	New York
+003135952	Techny
+003135953	Chicago
+003135954	South Deerfield
+003135955	South Deerfield
+003135956	New Rochelle
+003135957	New York
+003135958	Washington
+003135959	St Louis
+003135960	Washington
+003135961	Chicago
+003135962	New York
+003135963	Chicago
+003135964	St Louis
+003135965	San Antonio
+003135966	Washington
+003135967	s.i.
+003135968	Chicago
+003135969	St Louis
+003135970	Paris
+003135971	St Louis
+003135972	s.i.
+003135973	St Louis
+003135974	Saint Anne de Beaupre
+003135975	St Louis
+003135976	St Louis
+003135977	St Louis
+003135978	St Louis
+003135979	St Louis
+003135980	St Louis
+003135981	St Louis
+003135982	St Louis
+003135983	St Louis
+003135984	St Louis
+003135985	St Louis
+003135986	St Louis
+003135987	St Louis
+003135988	St Louis
+003135989	St Louis
+003135990	St Louis
+003135991	St Louis
+003135992	St Louis
+003135993	St Louis
+003135994	St Louis
+003135995	St Louis
+003135996	St Louis
+003135997	St Louis
+003135998	St Louis
+003135999	s.i.
+003136000	St Louis
+003136001	St Louis
+003136002	New York
+003136003	St Louis
+003136004	St Louis
+003136005	St Louis
+003136006	St Louis
+003136007	St Louis
+003136008	St Louis
+003136009	St Louis
+003136010	St Louis
+003136011	St Louis
+003136012	St Louis
+003136013	St Louis
+003136014	St Louis
+003136015	St Louis
+003136016	St Louis
+003136017	St Louis
+003136018	St Louis
+003136019	St Louis
+003136020	St Louis
+003136021	St Louis
+003136022	St Louis
+003136023	St Louis
+003136024	St Louis
+003136025	St Louis
+003136026	St Louis
+003136027	St Louis
+003136028	New York
+003136029	St Louis
+003136030	St Louis
+003136031	St Louis
+003136032	St Louis
+003136033	St Louis
+003136034	St Louis
+003136035	St Louis
+003136036	St Louis
+003136037	St Louis
+003136038	St Louis
+003136039	St Louis
+003136040	St Louis
+003136041	St Louis
+003136042	St Louis
+003136043	St Louis
+003136044	St Louis
+003136045	St Louis
+003136046	St Louis
+003136047	St Louis
+003136048	St Louis
+003136049	St Louis
+003136050	St Louis
+003136051	St Louis
+003136052	St Louis
+003136053	St Louis
+003136054	New York
+003136055	St Louis
+003136056	St Louis
+003136057	St Louis
+003136058	St Louis
+003136059	New York
+003136060	St Louis
+003136061	St Louis
+003136062	St Louis
+003136063	St Louis
+003136064	St Louis
+003136065	St Louis
+003136066	St Louis
+003136067	St Louis
+003136068	St Louis
+003136069	St Louis
+003136070	St Louis
+003136071	St Louis
+003136072	St Louis
+003136073	St Louis
+003136074	St Louis
+003136075	St Louis
+003136076	St Louis
+003136077	St Louis
+003136078	St Louis
+003136079	St Louis
+003136080	St Louis
+003136081	St Louis
+003136082	St Louis
+003136083	Dublin 
+003136084	St Louis
+003136085	St Louis
+003136086	St Louis
+003136087	Techny
+003136088	London
+003136089	Techny
+003136090	St Louis
+003136091	St Louis
+003136092	St Louis
+003136093	St Louis
+003136094	St Louis
+003136095	New Haven
+003136096	St Louis
+003136097	St Louis
+003136098	St Louis
+003136099	St Louis
+003136100	St Louis
+003136101	St Louis
+003136102	St Louis
+003136103	St Louis
+003136104	St Louis
+003136105	St Louis
+003136106	St Louis
+003136107	St Louis
+003136108	s.i.
+003136109	London
+003136110	Ottawa
+003136111	Muenster 
+003136112	Muenster 
+003136113	St Louis
+003136114	St Louis
+003136115	Washington
+003136116	Milwaukee
+003136117	Washington
+003136118	Washington
+003136119	Chicago
+003136120	Chicago
+003136121	Chicago
+003136122	Chicago
+003136123	Chicago
+003136124	Chicago
+003136125	Chicago
+003136126	Huntington
+003136127	New York
+003136128	St Louis
+003136129	Washington
+003136130	London
+003136131	Collegeville
+003136132	Washington
+003136133	Washington
+003136134	New York
+003136135	Westminster
+003136136	Paterson
+003136137	London
+003136138	s.i.
+003136139	New York
+003136140	St Louis
+003136141	St Louis
+003136142	St Louis
+003136143	St Louis
+003136144	St Louis
+003136145	New York
+003136146	St Louis
+003136147	Collegeville
+003136148	s.i.
+003136149	Springfield
+003136150	Washington
+003136151	St Meinrad
+003136152	Oconomowoc 
+003136153	Washington
+003136154	New York
+003136155	Chicago
+003136156	St Meinrad
+003136157	Jerusalem 
+003136158	New York
+003136159	Collegeville
+003136160	Collegeville
+003136161	Clyde 
+003136162	New York
+003136163	Washington
+003136164	Wichita
+003136165	Techny
+003136166	New York
+003136167	London
+003136168	Waterloo 
+003136169	New York
+003136170	Pulaski 
+003136171	New York
+003136172	Techny
+003136173	Techny
+003136174	Saint Paul
+003136175	Saint Paul
+003136176	Saint Paul
+003136177	Boston
+003136178	New York
+003136179	New York
+003136180	New York
+003136181	New York
+003136182	New York
+003136183	New York
+003136184	New York
+003136185	New York
+003136186	New York
+003136187	New York
+003136188	New York
+003136189	St Paul
+003136190	Clyde 
+003136191	New York
+003136192	New York
+003136193	Rome
+003136194	Paterson
+003136195	Paterson
+003136196	St Paul
+003136197	Clyde 
+003136198	Saint Paul
+003136199	St Paul
+003136200	St Paul
+003136201	Chicago
+003136202	New York
+003136203	St Louis
+003136204	St Louis
+003136205	St Louis
+003136206	New York
+003136207	Billings 
+003136208	Springfield
+003136209	s.i.
+003136210	Paterson
+003136211	New York
+003136212	St Meinrad
+003136213	Washington
+003136214	Washington
+003136215	Washington
+003136216	Washington
+003136217	New York
+003136218	St Benedict
+003136219	Saint Paul
+003136220	Scotch PlainsJ 
+003136221	Westminster
+003136222	Toledo
+003136223	London
+003136224	London
+003136225	New York
+003136226	London
+003136227	London
+003136228	London
+003136229	London
+003136230	London
+003136231	London
+003136232	Boston
+003136233	Washington
+003136234	New Haven
+003136235	New York
+003136236	s.i.
+003136237	Springfield
+003136238	New York
+003136239	Princeton 
+003136240	Chicago
+003136241	Collegeville
+003136242	Rome
+003136243	Rome
+003136244	New Hope
+003136245	Washington
+003136246	Washington
+003136247	St Louis
+003136248	Saint Louis 
+003136249	Milwaukee
+003136250	Washington
+003136251	Paris
+003136252	Innsbruck 
+003136253	London
+003136254	San Francisco
+003136255	New York
+003136256	Cleveland
+003136257	Dublin 
+003136258	New York
+003136259	San Francisco
+003136260	London
+003136261	New York
+003136262	Sheffield 
+003136263	New York
+003136264	St Louis
+003136265	Liguori 
+003136266	s.i.
+003136267	Springfield
+003136268	Dayton 
+003136269	Mt St Francis 
+003136270	Albuquerque
+003136271	Dayton 
+003136272	Madras 
+003136273	St Paul
+003136274	St Paul
+003376441	New York
+003376442	New York
+003376443	Dubuque 
+003376444	New York
+003376445	New York
+003376446	Techny
+003376447	London
+003376448	New York
+003376449	Washington
+003376450	s.i.
+003376451	Milwaukee
+003376452	New York
+003376453	Paris
+003376454	Milwaukee
+003376455	Washington
+003376456	New York
+003376457	Buenos Aires
+003376458	St Louis
+003376459	Cleveland
+003376460	Washington
+003376461	Garden City
+003376462	Garden City
+003376463	Washington
+003376464	Chicago
+003376465	Pulaski 
+003376466	Pulaski 
+003376467	Pulaski 
+003376468	Collegeville
+003376469	La Crosse 
+003376470	St Benedict
+003376471	Grand Rapids 
+003376472	St Louis
+003376473	Huntington
+003376474	Washington
+003376475	Notre Dame
+003376476	s.i.
+003376477	San Diego 
+003376478	Huntington
+003376479	Girard 
+003376480	New York
+003376481	Yonkers
+003376482	Dubuque 
+003376483	New York
+003376484	s.i.
+003376485	Garden City
+003376486	Mound 
+003376487	New York
+003376488	Huntington
+003376489	Huntington
+003376490	Techny
+003376491	Hollywood 
+003376492	London
+003376493	Washington
+003376494	New York
+003376495	Royal Oak
+003376496	Royal Oak
+003376497	Royal Oak
+003376498	Ozone ParkY 
+003376499	New York
+003376500	New York
+003376501	Des Moines 
+003376502	Brooklyn
+003376503	Huntington
+003376504	Huntington
+003376505	Huntington
+003376506	Huntington
+003376507	Huntington
+003376508	Huntington
+003376509	Birmingham
+003376510	Birmingham
+003376511	Birmingham
+003376512	Birmingham
+003376513	Birmingham
+003376514	Birmingham
+003376515	Birmingham
+003376516	Birmingham
+003376517	Birmingham
+003376518	Birmingham
+003376519	Birmingham
+003376520	Birmingham
+003376521	Birmingham
+003376522	Birmingham
+003376523	Birmingham
+003376524	Birmingham
+003376525	Birmingham
+003376526	Huntington
+003376527	Huntington
+003376528	Huntington
+003376529	Huntington
+003376530	Huntington
+003376531	Paterson
+003376532	St Paul
+003376533	Dublin 
+003376534	Dublin 
+003376535	Dublin 
+003376536	London
+003376537	Washington
+003376538	Washington
+003376539	New York
+003376540	Pulaski 
+003376541	Notre Dame
+003376542	Washington
+003376543	Detroit 
+003376544	St Meinrad
+003376545	San Francisco
+003376546	San Francisco
+003376547	Melbourne 
+003376548	s.i.
+003376549	Chicago
+003376550	Holy Cross 
+003376551	New York
+003376552	New York
+003376553	London
+003376554	London
+003376555	Washington
+003376556	Washington
+003376557	Washington
+003376558	Washington
+003376559	New York
+003376560	Dublin 
+003376561	El Paso 
+003376562	Montreal
+003376563	Yonkers
+003376564	New York
+003376565	New York
+003376566	Chicago
+003376567	Cleveland
+003376568	Huntington
+003376569	Milwaukee
+003376570	Paterson
+003376571	Techny
+003376572	Techny
+003376573	Washington
+003376574	Collegeville
+003376575	Pittsburgh
+003376576	Washington
+003376577	Huntington
+003376578	Huntington
+003376579	St Paul
+003376580	Spokane 
+003376581	New York
+003376582	London
+003376583	New York
+003376584	Huntington
+003376585	Washington
+003376586	New York
+003376587	Washington
+003376588	St Louis
+003376589	New York
+003376590	St Louis
+003376591	St Louis
+003376592	New York
+003376593	New York
+003376594	St Louis
+003376595	Saint Paul
+003376596	New York
+003376597	St Paul
+003376598	Liguori 
+003376599	Liguori 
+003376600	Liguori 
+003376601	St Louis
+003376602	Cleveland
+003376603	Oakmont 
+003376604	Paterson
+003376605	Washington
+003376606	Washington
+003376607	Dublin 
+003376608	New York
+003376609	Techny
+003376610	Washington
+003376611	New York
+003376612	St Louis
+003376613	St Louis
+003376614	New York
+003376615	St Louis
+003376616	DoverH 
+003376617	Marty
+003376618	New York
+003376619	New York
+003376620	Washington
+003376621	Milwaukee
+003376622	Collegeville
+003376623	Brooklyn
+003376624	Chicago
+003376625	Saint Louis 
+003376626	Washington
+003376627	New York
+003376628	Washington
+003376629	Washington
+003376630	New York
+003376631	New York
+003376632	Washington
+003376633	Washington
+003376634	Washington
+003376635	Washington
+003376636	Washington
+003376637	Saint Paul
+003376638	Wichita 
+003376639	New York
+003376640	New York
+003376641	New York
+003376642	Washington
+003376643	New York
+003376644	New York
+003376645	Chicago
+003376646	Notre Dame
+003376647	Washington
+003376648	St Meinrad
+003376649	Washington
+003376650	s.i.
+003376651	Dearborn
+003376652	Dearborn
+003376653	Dearborn
+003376654	Dearborn
+003376655	Dearborn
+003376656	Dearborn
+003376657	Dearborn
+003376658	Dearborn
+003376659	Dearborn
+003376660	Dearborn
+003376661	Dearborn
+003376662	Dearborn
+003376663	Dearborn
+003376664	Dearborn
+003376665	Dearborn
+003376666	Dearborn
+003376667	Dearborn
+003376668	Dearborn
+003376669	Dearborn
+003376670	Dearborn
+003376671	Dearborn
+003376672	Dearborn
+003376673	Dearborn
+003376674	Dearborn
+003376675	Dearborn
+003376676	Dearborn
+003376677	Dearborn
+003376678	Dearborn
+003376679	Dearborn
+003376680	Dearborn
+003376681	Dearborn
+003376682	Dearborn
+003376683	Dearborn
+003376684	Dearborn
+003376685	Dearborn
+003376686	Dearborn
+003376687	Dearborn
+003376688	Dearborn
+003376689	Dearborn
+003376690	Dearborn
+003376691	Dearborn
+003376692	Dearborn
+003376693	Dearborn
+003376694	Dearborn
+003376695	Dearborn
+003376696	New York Y 
+003376697	Washington
+003376698	Washington
+003376699	Dublin 
+003376700	Techny
+003376701	Washington
+003376702	Washington
+003376703	Garrison
+003376704	Garrison
+003376705	London
+003376706	London
+003376707	Quebec 
+003376708	Mexico 
+003376709	Washington
+003376710	Washington
+003376711	Washington
+003376712	London
+003376713	Minneapolis
+003376714	Minneapolis
+003376715	Minneapolis
+003376716	Washington
+003376717	Perryville 
+003376718	Washington
+003376719	Rome
+003376720	Boston
+003376721	Boston
+003376722	Melbourne 
+003376723	Washington
+003376724	New York
+003376725	New York
+003376726	Staten Island
+003376727	Washington
+003376728	Latrobe,
+003376729	London
+003376730	Notre Dame
+003376731	Arvada 
+003376732	Washington
+003376733	Trappist 
+003376734	Warszawa 
+003376735	Washington
+003376736	Mexico
+003376737	Washington
+003376738	Washington
+003376739	New York
+003376740	Washington
+003376741	St Meinrad
+003376742	GraymoorY 
+003376743	Conception
+003376744	Comte de Brome Que
+003376745	Washington
+003376746	St Louis
+003376747	Chicago
+003376748	Washington
+003376749	New Hope
+003376750	Pleasant Hill
+003376751	Chicago
+003376752	Chicago
+003376753	South Deerfield
+003376754	South Deerfield
+003376755	South Deerfield
+003376756	South Deerfield
+003376757	South Deerfield
+003376758	South Deerfield
+003376759	South Deerfield
+003376760	South Deerfield
+003376761	s.i.
+003376762	Baltimore
+003376763	s.i.
+003376764	New York
+003376765	New York
+003376766	Rome
+003376767	Trichinopoly 
+003376768	New York
+003376769	Boston
+003376770	s.i.
+003376771	Portland
+003376772	Washington
+003376773	s.i.
+003376774	New York
+003376775	London
+003376776	Rome
+003376777	New York
+003376778	Portland
+003376779	Cincinnati
+003376780	London
+003376781	London
+003376782	San Francisco
+003376783	London
+003376784	London
+003376785	London
+003376786	London
+003376787	Bruxelles 
+003376788	St Meinrad
+003376789	s.i.
+003376790	Baltimore
+003376791	NeuchÃ¢tel 
+003376792	Sydney 
+003376793	Birmingham
+003376794	Irondale 
+003376795	Birmingham
+003376796	Irondale 
+003376797	Irondale 
+003376798	Birmingham
+003376799	Birmingham
+003376800	Birmingham
+003376801	Birmingham
+003376802	Birmingham
+003376803	Birmingham
+003376804	Birmingham
+003376805	New York
+003376806	New York
+003376807	Birmingham
+003376808	Birmingham
+003376809	Birmingham
+003376810	Middletown 
+003376811	Middletown 
+003376812	Birmingham
+003376813	Birmingham
+003376814	Birmingham
+003376815	Birmingham
+003376816	Birmingham
+003376817	Birmingham
+003376818	Birmingham
+003376819	Birmingham
+003376820	Birmingham
+003376821	Birmingham
+003376822	Birmingham
+003376823	Birmingham
+003376824	Birmingham
+003376825	Birmingham
+003376826	Birmingham
+003376827	Birmingham
+003376828	Birmingham
+003376829	Birmingham
+003376830	Birmingham
+003376831	Birmingham
+003376832	Birmingham
+003376833	Birmingham
+003376834	Birmingham
+003376835	Birmingham
+003376836	London
+003376837	London
+003376838	Florissant
+003376839	London
+003376840	London
+003376841	Canton 
+003376842	Washington
+003376843	Birmingham
+003376844	Rome
+003376845	Birmingham
+003376846	Birmingham
+003376847	Birmingham
+003376848	Birmingham
+003376849	Birmingham
+003376850	Birmingham
+003376851	Birmingham
+003376852	Birmingham
+003376853	Birmingham
+003376854	Ipswich 
+003376855	Maryknoll
+003376856	Lebecq-Lez-Hal
+003376857	Indianapolis 
+003376858	Yonkers
+003376859	s.i.
+003376860	London
+003376861	Paris
+003376862	London
+003376863	s.i.
+003376864	St Paul
+003393917	South Bend 
+003393918	Washington
+003393919	New York
+003393920	Chicago
+003393921	Washington
+003393922	Chicago
+003393923	Washington
+003393924	New York
+003393925	Washington
+003393926	Washington
+003393927	Washington
+003393928	New York
+003393929	Washington
+003393930	New York
+003393931	St Paul
+003393932	Washington
+003393933	Dublin 
+003393934	New York
+003393935	New York
+003393936	New York
+003393937	New York
+003393938	Washington
+003393939	Boston
+003393940	Notre Dame
+003393941	Washington
+003393942	New York
+003393943	New York
+003393944	New Orleans 
+003393945	Washington
+003393946	Cincinnati
+003393947	Chicago
+003393948	New York
+003393949	New York
+003393950	New York
+003393951	Washington
+003393952	Washington
+003393953	Englewood
+003393954	Boston
+003393955	New York
+003393956	Boston
+003393957	South Bend 
+003393958	Royal Oak
+003393959	Royal Oak
+003393960	Royal Oak
+003393961	Paterson J 
+003393962	Washington
+003393963	Collegeville
+003393964	Royal Oak
+003393965	Royal Oak
+003393966	Royal Oak
+003393967	Royal Oak
+003393968	Royal Oak
+003393969	Royal Oak
+003393970	Royal Oak
+003393971	Royal Oak
+003393972	Royal Oak
+003393973	Royal Oak
+003393974	Royal Oak
+003393975	Royal Oak
+003393976	Royal Oak
+003393977	Royal Oak
+003393978	Royal Oak
+003393979	Royal Oak
+003393980	Royal Oak
+003393981	Royal Oak
+003393982	Royal Oak
+003393983	Royal Oak
+003393984	Royal Oak
+003393985	Royal Oak
+003393986	Royal Oak
+003393987	Royal Oak
+003393988	Royal Oak
+003393989	Royal Oak
+003393990	Royal Oak
+003393991	Royal Oak
+003393992	Royal Oak
+003393993	Royal Oak
+003393994	Royal Oak
+003393995	Royal Oak
+003393996	Royal Oak
+003393997	Royal Oak
+003393998	Huntington
+003393999	Eastcote 
+003394000	St Louis
+003394001	Huntington
+003394002	s.i.
+003394003	Huntington
+003394004	Milwaukee
+003394005	Huntington
+003394006	Ann Arbor 
+003394007	Washington
+003394008	Chicago
+003394009	Notre Dame
+003394010	Washington
+003394011	Milwaukee
+003394012	Milwaukee
+003394013	Washington
+003394014	New York
+003394015	Collegeville
+003394016	Springfield
+003394017	Notre Dame
+003394018	Notre Dame
+003394019	Paterson J 
+003394020	Washington
+003394021	Greenwich 
+003394022	Washington
+003394023	Washington
+003394024	San Francisco
+003394025	Huntington
+003394026	Saint Paul
+003394027	Milwaukee
+003394028	Washington
+003394029	Washington
+003394030	New York
+003394031	Washington
+003394032	New York
+003394033	Washington
+003394034	Pueblo 
+003394035	Huntington
+003394036	Washington
+003394037	Washington
+003394038	Portland
+003394039	New York
+003394040	s.i.
+003394041	New York
+003394042	Washington
+003394043	Davenport 
+003394044	Notre Dame
+003394045	Washington
+003394046	New York
+003394047	New York
+003394048	New York
+003394049	Springfield
+003394050	St Louis
+003394051	Notre Dame
+003394052	Oxford 
+003394053	Washington
+003394054	Washington
+003394055	Kenosha 
+003394056	Milwaukee
+003394057	Washington
+003394058	Philadelphia
+003394059	s.i.
+003394060	Pueblo 
+003394061	New York
+003394062	Huntington
+003394063	New York
+003394064	s.i.
+003394065	Washington
+003394066	Washington
+003394067	Washington
+003394068	Pittsburgh
+003394069	Huntington
+003394070	s.i.
+003394071	Geneva
+003394072	Geneva
+003394073	Geneva
+003394074	New York
+003394075	ProvidenceI 
+003394076	Paterson
+003394077	Paterson
+003394078	New York
+003394079	London
+003394080	London
+003394081	London
+003394082	Chicago
+003394083	New York
+003394084	Brooklyn
+003394085	Huntington
+003394086	s.i.
+003394087	Wichita 
+003394088	Wichita 
+003394089	Wichita 
+003394090	Lexington 
+003394091	Oxford 
+003394092	s.i.
+003394093	St Louis
+003394094	Denver 
+003394095	Pittsburgh
+003394096	Pittsburgh
+003394097	Pittsburgh
+003394098	New York
+003394099	New York
+003394100	s.i.
+003394101	Washington
+003394102	Philadelphia
+003394103	Chicago
+003394104	Washington
+003394105	Washington
+003394106	Huntington
+003394107	Washington
+003394108	Washington
+003394109	New York
+003394110	St Meinrad
+003394111	New York
+003394112	Washington
+003394113	Paterson
+003394114	Washington
+003394115	New York
+003394116	New York
+003394117	Washington
+003394118	St Meinrad
+003394119	New York
+003394120	Washington
+003394121	New York
+003394122	New York
+003394123	New York
+003394124	New York
+003394125	New York
+003394126	New York
+003394127	New York
+003394128	Toronto 
+003394129	St Paul
+003394130	New York
+003394131	New York
+003394132	London
+003394133	Notre Dame
+003394134	Notre Dame
+003394135	Notre Dame
+003394136	Notre Dame
+003394137	London
+003394138	New York
+003394139	Huntington
+003394140	Liguori 
+003394141	Liguori 
+003394142	Oconomowoc 
+003394143	Washington
+003394144	New York
+003394145	New York
+003394146	Washington
+003394147	London
+003394148	London
+003394149	New York
+003394150	New York
+003394151	New York
+003394152	New York
+003394153	Washington
+003394154	New York
+003394155	New York
+003394156	New York
+003394157	Garrison
+003394158	Garrison
+003394159	New York
+003394160	New York
+003394161	Washington
+003394162	Rome
+003394163	New Haven
+003394164	New York
+003394165	Washington
+003394166	Washington
+003394167	New Haven
+003394168	Washington
+003394169	Washington
+003394170	Washington
+003394171	Washington
+003394172	New York
+003394173	Regina 
+003394174	New York
+003394175	Chicago
+003394176	New York
+003394177	New York
+003394178	New York
+003394179	New York
+003394180	Brooklyn
+003394181	Brooklyn
+003394182	Washington
+003394183	Brooklyn
+003394184	Brooklyn
+003394185	Brooklyn
+003394186	Brooklyn
+003394187	St Louis
+003394188	Rome
+003394189	Boston
+003394190	Washington
+003394191	Boston
+003394192	Boston
+003394193	Boston
+003394194	Boston
+003394195	Boston
+003394196	Boston
+003394197	Le Pas 
+003394198	Boston
+003394199	Brighton 
+003394200	Washington
+003394201	New York
+003394202	Dublin 
+003394203	San Jose 
+003394204	London
+003394205	Huntington
+003394206	Washington
+003394207	Washington
+003394208	St Paul
+003394209	Huntington
+003394210	Huntington
+003394211	St Louis
+003394212	New York
+003394213	Washington
+003394214	London
+003394215	St Paul
+003394216	Dublin 
+003394217	Dublin 
+003394218	Dublin 
+003394219	Dublin 
+003394220	Grand Rapids 
+003394221	Murfreesboro 
+003394222	s.i.
+003394223	New York
+003394224	New York
+003394225	Washington
+003394226	Notre Dame
+003394227	Jaffna 
+003394228	New York
+003394229	Huntington
+003394230	New York
+003394231	New York
+003394232	Brooklyn
+003394233	Washington
+003394234	Los Angeles
+003394235	New York
+003394236	Liguori 
+003394237	Huntington
+003394238	Collegeville
+003394239	s.i.
+003394240	Brooklyn
+003394241	Chicago
+003394242	Washington
+003394243	Winona 
+003394244	New York
+003394245	OrangeburgY 
+003394246	New York
+003394247	New York
+003394248	Washington
+003394249	Huntington
+003394250	London
+003394251	London
+003394252	London
+003394253	London
+003394254	London
+003394255	New York
+003394256	Liguori 
+003394257	Englewood
+003394258	Englewood
+003394259	Englewood
+003394260	Englewood
+003394261	Englewood
+003394262	Paterson
+003394263	Bernharts 
+003394264	Philadelphia
+003394265	Philadelphia
+003394266	New York
+003394267	Garrison
+003394268	St Louis
+003394269	New York
+003394270	New York
+003394271	New York
+003394272	New York
+003394273	Washington
+003394274	Washington
+003394275	Washington
+003394276	New York
+003394277	Paterson
+003394278	Washington
+003394279	Washington
+003394280	Washington
+003394281	GraymoorY 
+003394282	St Meinrad
+003394283	St Louis
+003394284	New York
+003394285	New York
+003394286	New York
+003394287	Dublin 
+003394288	St Louis
+003394289	Washington
+003394290	New York
+003394291	Paterson
+003394292	Boston
+003394293	St Louis
+003394294	Glenview 
+003394295	Chicago
+003394296	St Paul
+003394297	Washington
+003394298	New York
+003394299	Chicago
+003394300	Washington
+003394301	Paterson
+003394302	Huntington
+003394303	St Paul
+003394304	Toronto 
+003394305	New York
+003394306	St Meinrad
+003394307	Washington
+003394308	St Paul
+003394309	New York
+003394310	New York
+003394311	Washington
+003394312	New York
+003394313	Millerville 
+003394314	Hales Corners
+003394315	Washington
+003394316	New York
+003394317	Montreal
+003394318	Glen RockJ 
+003394319	Huntington
+003394320	Chicago
+003394321	Washington
+003394322	Techny
+003394323	Chicago
+003394324	Washington
+003394325	New York
+003394326	New York
+003394327	Washington
+003394328	Washington
+003394329	Washington
+003394330	Westminster
+003394331	Englewood
+003394332	Washington
+003394333	Chicago
+003394334	Portland
+003394335	Milwaukee
+003394336	s.i.
+003394337	New York
+003394338	Chicago
+003394339	Baltimore
+003394340	Evanston 
+003394341	Boston
+003394342	Boston
+003394343	New York
+003394344	Notre Dame
+003394345	Washington
+003394346	New York
+003394347	Washington
+003394348	Chicago
+003394349	Washington
+003394350	Rome
+003394351	Chicago
+003394352	Warszawa 
+003394353	Baltimore
+003394354	New York
+003394355	Washington
+003394356	Fort William 
+003394357	London
+003394358	London
+003394359	London
+003394360	London
+003394361	Washington
+003394362	Chicago
+003394363	St Louis
+003394364	s.i.
+003394365	Boston
+003394366	New York
+003394367	Rome
+003394368	Chicago
+003394369	St Meinrad
+003394370	Washington
+003394371	Washington
+003394372	Paterson
+003394373	Washington
+003394374	Washington
+003394375	Toledo
+003394376	Paterson
+003394377	St Louis
+003394378	Liguori 
+003394379	San Bernardino 
+003394380	New York
+003394381	New York
+003394382	New Hope
+003394383	Cincinnati
+003394384	Pleasant Hill
+003394385	Conception
+003394386	New Hope
+003394387	Chicago
+003394388	South Deerfield
+003394389	Washington
+003394390	Chicago
+003394391	Washington
+003394392	Washington
+003394393	New York
+003394394	London
+003394395	Portland
+003394396	Portland
+003394397	Saint Paul
+003394398	Portland
+003394399	London
+003394400	New York
+003394401	San Francisco
+003394402	Washington
+003394403	New York
+003394404	Portland
+003394405	Philadelphia
+003394406	Washington
+003394407	Washington
+003394408	Washington
+003394409	Vincennes 
+003394410	Washington
+003394411	Washington
+003394412	Washington
+003394413	Ottawa
+003394414	New York
+003394415	Los Angeles
+003394416	s.i.
+003394417	Fort Wayne 
+003394418	Paris
+003394419	Rome
+003394420	New York
+003394421	Torino
+003394422	Philadelphia
+003394423	New York
+003394424	Baltimore
+003394425	Baltimore
+003394426	New York
+003394427	Boston
+003394428	London
+003394429	Milwaukee
+003394430	s.i.
+003394431	London
+003394432	Rome
+003394433	Paris
+003394434	San Francisco
+003394435	St Paul
+003394436	San Francisco
+003394437	Huntington
+003394438	Paris
+003394439	Rome
+003394440	Lewes 
+003394441	Milwaukee
+003394442	Paterson
+003394443	Westminster
+003394444	s.i.
+003394445	New York
+003394446	New York
+003394447	Westminster
+003394448	New York
+003394449	Fall River 
+003394450	Mundelein,
+003394451	London
+003394452	Walls 
+003394453	London
+003394454	London
+003394455	Chino 
+003394456	New York
+003394457	New Hope
+003394458	New Hope
+003394459	London
+003394460	London
+003394461	Unknown
+003394462	s.i.
+003394463	Dublin 
+003394464	s.i.
+003394465	New York
+003394466	Santa Maria-on-Hudson Park
+003394467	St Meinrad
+003394468	Ipswich 
+003394469	Paris
+003394470	Portland
+003394471	London
+003394472	London
+003394473	Cincinnati
+003394474	Fort Wayne 
+003394475	Philadelphia
+003394476	Toledo
+003394477	Omaha 
+003394478	Omaha 
+003394479	Chicago
+003394480	Lisle 
+003394481	Toledo
+003394482	s.i.
+003394483	Chicago
+003394484	Walls 
+003422213	Paterson
+003422214	New York
+003422215	San Antonio
+003422216	Washington
+003422217	Boston
+003422218	Washington
+003422219	Techny
+003422220	Royal Oak
+003422221	Paterson
+003422222	Collegeville
+003422223	New York
+003422224	Wichita 
+003422225	Washington
+003422226	Kansas City 
+003422227	Chicago
+003422228	Chicago
+003422229	Chicago
+003422230	Chicago
+003422231	Chicago
+003422232	s.i.
+003422233	New York
+003422234	New York
+003422235	St Louis
+003422236	Notre Dame
+003422237	Brooklyn
+003422238	Chicago
+003422239	Chicago
+003422240	Washington
+003422241	Washington
+003422242	Washington
+003422243	Washington
+003422244	New York
+003422245	Santa Barbara
+003422246	New Rochelle
+003422247	Washington
+003422248	Washington
+003422249	Washington
+003422250	Washington
+003422251	Washington
+003422252	Washington
+003422253	Washington
+003422254	Washington
+003422255	Washington
+003422256	Washington
+003422257	Chicago
+003422258	Chicago
+003422259	Washington
+003422260	Chicago
+003422261	Birmingham
+003422262	Saint Mary-of-the-Woods 
+003422263	Birmingham
+003422264	Saint Paul
+003422265	Watertown 
+003422266	Birmingham
+003422267	Torino
+003422268	Chicago
+003422269	Washington
+003422270	Dublin 
+003422271	Toulouse 
+003422272	Chicago
+003422273	s.i.
+003422274	San Francisco
+003422275	Chicago
+003422276	Unknown
+003422277	Birmingham
+003422278	Birmingham
+003422279	Birmingham
+003422280	Birmingham
+003422281	Birmingham
+003422282	Birmingham
+003422283	Birmingham
+003422284	Birmingham
+003422285	Birmingham
+003422286	Birmingham
+003422287	Birmingham
+003422288	Birmingham
+003422289	Birmingham
+003422290	Birmingham
+003422291	Birmingham
+003422292	Birmingham
+003422293	Michigan 
+003422294	Minneapolis
+003422295	Minneapolis
+003422296	London
