@@ -13,7 +13,7 @@
 use constant ROUND      => 3;
 use constant DRIVER     => 'SQLite';
 use constant DATABASE   => './etc/pamphlets.db';
-use constant GOODENOUGH => .85;
+use constant GOODENOUGH => .83;
 use constant SELECT     => 'SELECT COUNT( person ) AS c, person FROM persons GROUP BY person ORDER BY c desc;';
 
 # require
@@ -64,8 +64,6 @@ for ( my $i = 0; $i < $count; $i++ ) {
 
 		if ( $score >= GOODENOUGH ) {
 		
-			#warn "\t", join( "\t", ( $person, $name,  $score ) ), "\n";
-
 			# update list of good enough values
 			$goodenough{ $name }++;
 			
