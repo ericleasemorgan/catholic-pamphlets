@@ -1,3 +1,7 @@
 .DS_Store
 etc/pamphlets.db
 lib/tika-server.jar
+pdf/*.pdf
+sql/*.sql
+tsv/*.tsv
+txt/*.txt
