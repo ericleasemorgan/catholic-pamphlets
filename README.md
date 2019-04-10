@@ -31,7 +31,7 @@ Here is an outline of how to get the system to work for you, but your mileage wi
    
    3. `./bin/marc2sql.pl ./etc/pamphlets.mrc` - extract various bits of bibliographic information from the MARC data and cache the result as a set of SQL statements
    
-   4. `./bin/db-initialize.sh` - create a rudimentary SQLite database from the cached SQL
+   4. `./bin/db-initialize.sh` - create a rudimentary SQLite database from the cached SQL as per ./etc/schema.sql
    
    5. `./bin/clean-cities.pl > ./sql/cities.sql` - normalize the place values to cities, and cache the result as SQL
    
@@ -61,17 +61,17 @@ Here is an outline of how to get the system to work for you, but your mileage wi
    
    18. `./bin/db-update-again.sh` - commit the results of the previous step to the database
    
-   19. `./bin/rank-persons.sh` - apply TFIDF to the normalized list of persons in order to justify their significance
+   19. `./bin/rank-persons.sh > ./sql/persons-ranks.sql` - apply TFIDF to the normalized list of persons in order to justify their significance
    
    20. `./bin/db-update-final.sh` - finished with all of our processing; do the last commit to the database
    
-   21. `./bin/make-indexes.sh` - loop through the database and output a catalog &amp; indexed intended for printing
+   21. `./bin/make-indexes.sh` - loop through the database and output a catalog &amp; indexes intended for printing
    
    22. `./bin/index.pl` - loop through the database and electronically index the content with Solr according to ./etc/schema.xml
    
-   23. `./bin/search.pl` - query the electronic index complete with faceted search &amp; Boolean logic
+   23. `./bin/search.pl` - query the electronic index complete with faceted browse &amp; Boolean logic
    
    
 ---
 Eric Lease Morgan &lt;emorgan@nd.edu&gt;   
-April 8, 2019
+April 10, 2019
