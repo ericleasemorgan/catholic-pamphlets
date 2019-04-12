@@ -193,8 +193,10 @@ while ( my $record = $batch->next ) {
 	}
 			
 	# output
+	my $concordance = $urls{ 'concordance' };
+	
 	print B "-- system number: $system\n";
-	print B "INSERT INTO titles ('author', 'date', 'extent', 'notes', 'oclc', 'place', 'publisher', 'system', 'title', 'year', 'pages', 'statement' ) VALUES ( '$author', '$date', '$extent', '$notes', '$oclc', '$place', '$publisher', '$system', '$title', '$year', '$pages', '$statement' );\n";
+	print B "INSERT INTO titles ('author', 'date', 'extent', 'notes', 'oclc', 'place', 'publisher', 'system', 'title', 'year', 'pages', 'statement', 'concordance' ) VALUES ( '$author', '$date', '$extent', '$notes', '$oclc', '$place', '$publisher', '$system', '$title', '$year', '$pages', '$statement', '$concordance' );\n";
 	
 	# output
 	print S "-- system number: $system\n";

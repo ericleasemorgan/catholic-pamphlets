@@ -10,22 +10,20 @@
 use constant FACETFIELD         => ( 'facet_subject', 'facet_author', 'facet_publisher', 'facet_place', 'facet_date', 'facet_year', 'facet_city', 'facet_tag', 'facet_person' );
 use constant HIGHLIGHTDELIMITER => '*';
 use constant HIGHLIGHTFEILD     => 'fulltext';
-use constant ROWS               => 10;
 use constant SNIPPETS           => 3;
 use constant SOLR               => 'http://localhost:8983/solr/pamphlets';
+use constant PDF                => 'http://dh.crc.nd.edu/sandbox/pamphlets-repository/';
+
 
 # require
 use strict;
 use WebService::Solr;
 
 # get input; sanity check
-my $query = $ARGV[ 0 ];
-if ( ! $query ) {
-
-	print "Usage: $0 <query>\n";
-	exit;
-	
-}
+my $query  = $ARGV[ 0 ];
+my $rows   = $ARGV[ 1 ];
+my $format = $ARGV[ 2 ];
+if ( ! $query or ! $rows or ! $format ) { die "Usage: $0 <query> <integer> <summary|terse|full|csv|html>\n" }
 
 # initialize
 my $solr = WebService::Solr->new( SOLR );
@@ -40,7 +38,7 @@ $search_options{ 'hl.simple.post' } = HIGHLIGHTDELIMITER;
 $search_options{ 'hl.simple.pre' }  = HIGHLIGHTDELIMITER;
 $search_options{ 'hl.snippets' }    = SNIPPETS;
 $search_options{ 'hl' }             = 'true';
-$search_options{ 'rows' }           = ROWS;
+$search_options{ 'rows' }           = $rows;
 
 # search
 my $response = $solr->search( $query, \%search_options );
@@ -89,62 +87,70 @@ my $total = $response->content->{ 'response' }->{ 'numFound' };
 # get number of hits returned
 my @hits = $response->docs;
 
-# start the output
-print "Your search found $total item(s) and " . scalar( @hits ) . " items(s) are displayed.\n\n";
-print '    subject facets: ', join( '; ', @facets_subject ), "\n\n";
-print '     author facets: ', join( '; ', @facets_author ), "\n\n";
-print '  publisher facets: ', join( '; ', @facets_publisher ), "\n\n";
-print '       city facets: ', join( '; ', @facets_city ), "\n\n";
-print '       year facets: ', join( '; ', @facets_year ), "\n\n";
-print '        tag facets: ', join( '; ', @facets_tag ), "\n\n";
-print '     person facets: ', join( '; ', @facets_person ), "\n\n";
+# start the output; full/everything
+if ( $format eq 'full' ) {
 
-# loop through each document
-for my $doc ( $response->docs ) {
+	print "Your search found $total item(s) and " . scalar( @hits ) . " items(s) are displayed.\n\n";
+	print '    subject facets: ', join( '; ', @facets_subject ), "\n\n";
+	print '     author facets: ', join( '; ', @facets_author ), "\n\n";
+	print '  publisher facets: ', join( '; ', @facets_publisher ), "\n\n";
+	print '       city facets: ', join( '; ', @facets_city ), "\n\n";
+	print '       year facets: ', join( '; ', @facets_year ), "\n\n";
+	print '        tag facets: ', join( '; ', @facets_tag ), "\n\n";
+	print '     person facets: ', join( '; ', @facets_person ), "\n\n";
+
+	# loop through each document
+	for my $doc ( $response->docs ) {
 	
-	# parse
-	my $system    = $doc->value_for(  'system' );
-	my $author    = $doc->value_for(  'author' );
-	my $title     = $doc->value_for(  'title' );
-	my $publisher = $doc->value_for(  'publisher' );
-	my $place     = $doc->value_for(  'place' );
-	my $date      = $doc->value_for(  'date' );
-	my $extent    = $doc->value_for(  'extent' );
-	my $notes     = $doc->value_for(  'notes' );
-	my $year      = $doc->value_for(  'year' );
-	my $city      = $doc->value_for(  'city' );
-	my $summary   = $doc->value_for(  'summary' );
-	my @persons   = $doc->values_for( 'person' );
-	my @subjects  = $doc->values_for( 'subject' );
-	my @tags      = $doc->values_for( 'tag' );
+		# parse
+		my $author      = $doc->value_for(  'author' );
+		my $city        = $doc->value_for(  'city' );
+		my $concordance = $doc->value_for(  'concordance' );
+		my $date        = $doc->value_for(  'date' );
+		my $extent      = $doc->value_for(  'extent' );
+		my $notes       = $doc->value_for(  'notes' );
+		my $pdf         = $doc->value_for(  'pdf' );
+		my $place       = $doc->value_for(  'place' );
+		my $publisher   = $doc->value_for(  'publisher' );
+		my $summary     = $doc->value_for(  'summary' );
+		my $system      = $doc->value_for(  'system' );
+		my $title       = $doc->value_for(  'title' );
+		my $year        = $doc->value_for(  'year' );
+		my @persons     = $doc->values_for( 'person' );
+		my @subjects    = $doc->values_for( 'subject' );
+		my @tags        = $doc->values_for( 'tag' );
 			
-	# create a list of snippets
-	my @snippets = ();
-	for ( my $i = 0; $i < SNIPPETS; $i++ ) {
+		# create a list of snippets
+		my @snippets = ();
+		for ( my $i = 0; $i < SNIPPETS; $i++ ) {
 	
-		my $snippet  =  $highlights->{ $system }->{ fulltext }->[ $i ];
-		$snippet     =~ s/\s+/ /g;
-		$snippet     =~ s/^ +//;
-		push( @snippets, $snippet );
+			my $snippet  =  $highlights->{ $system }->{ fulltext }->[ $i ];
+			$snippet     =~ s/\s+/ /g;
+			$snippet     =~ s/^ +//;
+			push( @snippets, $snippet );
 		
+		}
+		
+		# output
+		print "$title\n";
+		print "       author: $author\n";
+		print "    publisher: $publisher $place $date\n";
+		print "       extent: $extent\n";
+		print "          PDF: $pdf\n";
+		print "      summary: $summary\n";
+		print "      snippet: " . join( ' ... ', @snippets ), "\n";
+		print "        notes: $notes\n";
+		print "         year: $year\n";
+		print "  concordance: $concordance\n";
+		print "         city: $city\n";
+		print "    person(s): " . join( '; ', @persons ), "\n";
+		print "   subject(s): " . join( '; ', @subjects ), "\n";
+		print "       tag(s): " . join( '; ', @tags ), "\n";
+		print "       system: $system\n";
+		print "\n\n";
+	
 	}
-		
-	# output
-	print "          system: $system\n";
-	print "          author: $author\n";
-	print "           title: $title\n";
-	print "       publisher: $publisher $place $date\n";
-	print "          extent: $extent\n";
-	print "           notes: $notes\n";
-	print "            year: $year\n";
-	print "            city: $city\n";
-	print "         summary: $summary\n";
-	print "       person(s): " . join( '; ', @persons ), "\n";
-	print "      subject(s): " . join( '; ', @subjects ), "\n";
-	print "          tag(s): " . join( '; ', @tags ), "\n";
-	print "         snippet: " . join( ' ... ', @snippets ), "\n";
-	print "\n";
-	
+
 }
 
 # done

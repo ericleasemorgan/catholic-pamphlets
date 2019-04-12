@@ -38,9 +38,10 @@ while( my $titles = $handle->fetchrow_hashref ) {
 	my $city = '';
 	
 	# parse the title data
-	my $system    = $$titles{ 'system' };
-	my $date      = $$titles{ 'date' };
-	my $author    = $$titles{ 'author' };
+	my $system      = $$titles{ 'system' };
+	my $date        = $$titles{ 'date' };
+	my $author      = $$titles{ 'author' };
+	my $concordance = $$titles{ 'concordance' };
 	my $title     = $$titles{ 'title' };
 	my $publisher = $$titles{ 'publisher' };
 	my $place     = $$titles{ 'place' };
@@ -87,6 +88,7 @@ while( my $titles = $handle->fetchrow_hashref ) {
 	# debug; dump
 	warn "           author: $author\n";
 	warn "           extent: $extent\n";
+	warn "           concordance: $concordance\n";
 	warn "            notes: $notes\n";
 	warn "        person(s): ", join( '; ', @persons ), "\n";
 	warn "           tag(s): ", join( '; ', @tags ), "\n";
@@ -104,6 +106,7 @@ while( my $titles = $handle->fetchrow_hashref ) {
 	my $solr_author          = WebService::Solr::Field->new( 'author'          => $author );
 	my $solr_date            = WebService::Solr::Field->new( 'date'            => $date );
 	my $solr_extent          = WebService::Solr::Field->new( 'extent'          => $extent );
+	my $solr_concordance     = WebService::Solr::Field->new( 'concordance'     => $concordance );
 	my $solr_facet_author    = WebService::Solr::Field->new( 'facet_author'    => $author );
 	my $solr_facet_date      = WebService::Solr::Field->new( 'facet_date'      => $date );
 	my $solr_facet_year      = WebService::Solr::Field->new( 'facet_year'      => $year );
@@ -122,7 +125,7 @@ while( my $titles = $handle->fetchrow_hashref ) {
 
 	# fill a solr document with simple fields
 	my $doc = WebService::Solr::Document->new;
-	$doc->add_fields( $solr_year, $solr_city, $solr_facet_year, $solr_facet_city, $solr_author, $solr_date, $solr_system, $solr_extent, $solr_facet_author, $solr_facet_date, $solr_facet_place, $solr_facet_publisher, $solr_fulltext, $solr_place, $solr_publisher, $solr_title, $solr_summary );
+	$doc->add_fields( $solr_year, $solr_city, $solr_facet_year, $solr_facet_city, $solr_author, $solr_date, $solr_system, $solr_extent, $solr_facet_author, $solr_facet_date, $solr_facet_place, $solr_facet_publisher, $solr_fulltext, $solr_place, $solr_publisher, $solr_title, $solr_summary, $solr_concordance );
 
 	# add complex fields
 	foreach ( @facet_subjects ) { $doc->add_fields(( WebService::Solr::Field->new( 'facet_subject' => $_ ))) }

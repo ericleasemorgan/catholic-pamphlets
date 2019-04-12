@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# db-update.sh - given another set of pre-created SQL files, update a database
+# db-update-quick.sh - re-create the database but re-use time-intensive processes
 
 # Eric Lease Morgan <emorgan@nd.edu>
 # (c) University of Notre Dame, and distributed under a GNU Public License
 
-# April 2, 2019 - first cut; on a plane from Palo Alto and back from Florence
+# April  2, 2019 - first cut; on a plane from Palo Alto and back from Florence
+# April 10, 2019 - tweaking
 
 
 ./bin/marc2sql.pl ./etc/pamphlets.mrc

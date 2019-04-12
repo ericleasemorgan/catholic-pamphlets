@@ -10,24 +10,25 @@
 
 
 CREATE TABLE titles (
-  author     TEXT,
-  city       TEXT,
-  date       TEXT,
-  extent     TEXT,
-  flesch     INT,
-  notes      TEXT,
-  oclc       TEXT,
-  pages      TEXT,
-  place      TEXT,
-  publisher  TEXT,
-  sentences  INT,
-  statement  TEXT,
-  summary    TEXT,
-  system     TEXT PRIMARY KEY,
-  title      TEXT,
-  title_sort TEXT,
-  words      INT,
-  year       INT
+  author       TEXT,
+  city         TEXT,
+  date         TEXT,
+  extent       TEXT,
+  concordance  TEXT,
+  flesch       INT,
+  notes        TEXT,
+  oclc         TEXT,
+  pages        TEXT,
+  place        TEXT,
+  publisher    TEXT,
+  sentences    INT,
+  statement    TEXT,
+  summary      TEXT,
+  system       TEXT PRIMARY KEY,
+  title        TEXT,
+  title_sort   TEXT,
+  words        INT,
+  year         INT
 );
 
 
